@@ -17,8 +17,10 @@ def task_1_add_new_record_to_db(con) -> None:
 
     """
     cursor = con.cursor()
-    cursor.execute("INSERT INTO Customers(customername, contactname, address, city, postalcode, country)"
-                   "VALUES ('Thomas', 'David', 'Some Address', 'London', 774, 'Singapore')")
+    cursor.execute("INSERT INTO Customers(customername, contactname, "
+                   "address, city, postalcode, country) "
+                   "VALUES ('Thomas', 'David', 'Some Address', 'London', "
+                   "774, 'Singapore')")
 
 
 def task_2_list_all_customers(cur) -> list:
@@ -127,7 +129,8 @@ def task_8_count_customers_by_city(cur):
 
 def task_9_count_customers_by_country_with_than_10_customers(cur):
     """
-    List the number of customers in each country. Only include countries with more than 10 customers.
+    List the number of customers in each country.
+    Only include countries with more than 10 customers.
 
     Args:
         cur: psycopg cursor
@@ -177,9 +180,9 @@ def task_12_list_suppliers_from_specified_countries(cur):
 
     Returns: 8 records
     """
-    cur.execute("SELECT * "
+    cur.execute("SELECT supplierid, suppliername, contactname, city, country "
                 "FROM suppliers "
-                "WHERE country='USA' AND country='UK' AND country='Japan';")
+                "WHERE country IN ('USA', 'UK', 'Japan');")
     return cur.fetchall()
 
 
@@ -237,10 +240,12 @@ def task_16_match_all_customers_and_suppliers_by_country(cur):
 
     Returns: 194 records
     """
-    cur.execute("SELECT c.customername, c.address, c.country AS customercountry, "
+    cur.execute("SELECT "
+                "c.customername, c.address, c.country AS customercountry, "
                 "s.suppliername, s.country AS suppliercountry "
                 "FROM customers AS c "
                 "FULL JOIN suppliers AS s "
                 "ON c.country = s.country "
                 "ORDER BY c.country, s.country;")
     return cur.fetchall()
+
