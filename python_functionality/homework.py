@@ -14,12 +14,7 @@ def task_1_fix_names_start_letter(data: DT) -> DT:
         fix_names_start_letters([{'name': 'Alex', 'age': 26}, {'name': 'denys', 'age': 89}])
         >>> [{'name': 'Alex', 'age': 26}, {'name': 'Denys', 'age': 89}]
     """
-    for i in range(len(data)):
-        for key, val in data[i].items():
-            if type(val) == str and val[0].islower():
-                val = val.replace(val[0], val[0].upper())
-                (data[i])[key] = val
-    return data
+    return [{key: val.capitalize() if isinstance(val, str) else val for key, val in dt.items()} for dt in data]
 
 
 def task_2_remove_dict_fields(data: DT, redundant_keys: List[str]) -> DT:
@@ -32,10 +27,7 @@ def task_2_remove_dict_fields(data: DT, redundant_keys: List[str]) -> DT:
     """
     for i in range(len(data)):
         if type(data[i]) is dict:
-            for key in list(data[i].keys()):
-                if key in redundant_keys:
-                    del (data[i])[key]
-    return data
+            return [{key: val for key, val in data[i].items() if key not in redundant_keys}]
 
 
 def task_3_find_item_via_value(data: DT, value) -> DT:
@@ -45,23 +37,14 @@ def task_3_find_item_via_value(data: DT, value) -> DT:
         find_item_via_value([{'name': 'Alex', 'age': 26}, {'name': 'denys', 'age': 89}], 26)
         >>> [{'name': 'Alex', 'age': 26}]
     """
-    temp = {}
-    for i in range(len(data)):
-        for key, val in data[i].items():
-            if val == value:
-                temp = data[i]
-                break
-    data.clear()
-    data.append(temp)
-    return data
+    return [dt for dt in data if {val for val in dt.values() if val == value}]
 
 
 def task_4_min_value_integers(data: List[int]) -> int:
     """
     Find and return minimum value from list
     """
-    data.sort()
-    return data[0] if data else None
+    return min(data) if data else None
 
 
 def task_5_min_value_strings(data: List[Union[str, int]]) -> str:
