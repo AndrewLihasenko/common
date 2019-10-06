@@ -14,7 +14,7 @@ def task_1_fix_names_start_letter(data: DT) -> DT:
         fix_names_start_letters([{'name': 'Alex', 'age': 26}, {'name': 'denys', 'age': 89}])
         >>> [{'name': 'Alex', 'age': 26}, {'name': 'Denys', 'age': 89}]
     """
-    return [{key: val.capitalize() if isinstance(val, str) else val for key, val in dt.items()} for dt in data]
+    return [{key: (val.capitalize() if isinstance(val, str) else val) for (key, val) in dt.items()} for dt in data]
 
 
 def task_2_remove_dict_fields(data: DT, redundant_keys: List[str]) -> DT:
@@ -25,9 +25,7 @@ def task_2_remove_dict_fields(data: DT, redundant_keys: List[str]) -> DT:
        remove_dict_field([{'name': 'Alex', 'age': 26}, {'name': 'denys', 'age': 89}], 'age')
         >>> [{'name': 'Alex'}, {'name': 'denys'}]
     """
-    for i in range(len(data)):
-        if type(data[i]) is dict:
-            return [{key: val for key, val in data[i].items() if key not in redundant_keys}]
+    return [{key: val for key, val in dt.items() if key not in redundant_keys} for dt in data]
 
 
 def task_3_find_item_via_value(data: DT, value) -> DT:
@@ -60,7 +58,7 @@ def task_6_min_value_list_of_dicts(data: DT, key: str) -> ST:
     Returns:
 
     """
-    return min(data, key=str) if data else None
+    return min([dt for dt in data if key in dt.keys()], key=(lambda x: x[key]))
 
 
 def task_7_max_value_list_of_lists(data: List[List[int]]) -> int:
@@ -68,9 +66,9 @@ def task_7_max_value_list_of_lists(data: List[List[int]]) -> int:
     Find max value from list of lists
     """
     new_list = []
-    for list_ in data:
-        if list_:
-            new_list.append(max(list_, key=lambda x: int(x)))
+    for nums in data:
+        if nums:
+            new_list.append(max(nums, key=lambda x: int(x)))
     return max(new_list, key=lambda x: int(x))
 
 
