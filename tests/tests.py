@@ -26,7 +26,7 @@ class Test(unittest.TestCase):
             expected_result = corners * 90
             self.assertEqual(actual_result, expected_result)
         else:
-            raise ValueError("Rectangle has only 4 corners")
+            self.assertRaises(ValueError, actual_result)
 
     def test_get_rectangle_diagonal(self):
         actual_result = rect_valid_value.get_rectangle_diagonal()
@@ -46,7 +46,7 @@ class Test(unittest.TestCase):
             expected_result = rect_valid_value.height / 2
             self.assertEqual(actual_result, expected_result)
         else:
-            raise ValueError("Can't inscribed circle in rectangle with such width and height")
+            self.assertRaises(ValueError, actual_result)
 
 
 if __name__ == "__main__":
