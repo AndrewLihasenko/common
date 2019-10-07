@@ -14,7 +14,8 @@ def task_1_fix_names_start_letter(data: DT) -> DT:
         fix_names_start_letters([{'name': 'Alex', 'age': 26}, {'name': 'denys', 'age': 89}])
         >>> [{'name': 'Alex', 'age': 26}, {'name': 'Denys', 'age': 89}]
     """
-    return [{key: (val.capitalize() if isinstance(val, str) else val) for (key, val) in dt.items()} for dt in data]
+    return [{'name': dt['name'].capitalize(), 'age': dt['age']}
+            for dt in data if 'name' in dt.keys()]
 
 
 def task_2_remove_dict_fields(data: DT, redundant_keys: List[str]) -> DT:
