@@ -7,7 +7,7 @@ rectangle_value = Rectangle(width=35, height=50)
 square_value = Rectangle(width=35, height=35)
 
 
-class Test(unittest.TestCase):
+class RectangleTestCases(unittest.TestCase):
 
     def test_get_rectangle_perimeter(self):
         actual_result = rectangle_value.get_rectangle_perimeter()
@@ -63,9 +63,7 @@ class Test(unittest.TestCase):
 
     def test_get_radius_of_inscribed_circle_valid_value(self):
         actual_result = square_value.get_radius_of_inscribed_circle()
-        diagonal = math.sqrt(math.pow(square_value.height, 2) +
-                             math.pow(square_value.width, 2))
-        expected_result = diagonal / 2 * math.sqrt(2)
+        expected_result = square_value.width / 2
         self.assertEqual(actual_result, expected_result)
 
     def test_get_radius_of_inscribed_circle_raises_error(self):
@@ -75,3 +73,4 @@ class Test(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
