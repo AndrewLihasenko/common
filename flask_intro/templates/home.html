@@ -9,8 +9,8 @@
 {% endblock %}
 
 {% block links %}
-    <a class="nav-link" href="/vegetables">Vegetables</a>
-    <a class="nav-link" href="/fruits">Fruits</a>
+    <a class="nav-link" href="{{url_for('get_vegetables')}}">Vegetables</a>
+    <a class="nav-link" href="{{url_for('get_fruits')}}">Fruits</a>
 {% endblock %}
 
 {% block footer %}
