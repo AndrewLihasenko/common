@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block base_navbar %}
+    {{super()}}
+{% endblock %}
+
+{% block home_link %}
+    <a class="nav-link" href="/">Home</a>
+{% endblock %}
+
+{% block body %}
+    {% for i in v_list %}
+    <ul><li>{{i}}</li></ul>
+    {% if i == "beetroot"%}
+        <ul><li>{{i|upper()}}</li></ul>
+        {% endif %}
+    {% endfor %}
+{% endblock %}
+
+{% block footer %}
+    {{super()}}
+{% endblock %}
