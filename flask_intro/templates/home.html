@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block base_navbar %}
+    {{super()}}
+{% endblock %}
+
+{% block home_link %}
+    <a class="nav-link" href="/">Home</a>
+{% endblock %}
+
+{% block links %}
+    <a class="nav-link" href="{{url_for('get_vegetables')}}">Vegetables</a>
+    <a class="nav-link" href="{{url_for('get_fruits')}}">Fruits</a>
+{% endblock %}
+
+{% block footer %}
+     {{super()}}
+{% endblock %}
