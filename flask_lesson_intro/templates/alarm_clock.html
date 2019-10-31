@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% from 'macros.html' import get_title, get_text, count_words %}
+
+{% block base_navbar %}
+{{super()}}
+{% endblock %}
+
+{% block body %}
+    {{ get_title(data, "Alarm clock") }}
+    <p class="fig"><img src="{{url_for('static', filename='alarm_clock.jpg')}}" width="650px" height="600px"></p>
+    {{ get_text(data, "Alarm clock") }}
+    <p>In the above text of words: {{ count_words(data, "Alarm clock") }}</p>
+
+{% endblock %}
+
+{% block footer %}
+{{super()}}
+{% endblock %}
