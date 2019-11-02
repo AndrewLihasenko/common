@@ -2,7 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Base</title>
+    {% if True %}
+    <title>{{ item }} - Homework Flask Intro (II)</title>
+    {% else %}
+    <title>Homework Flask Intro (II)</title>
+    {% endif %}
   <style>
    h1 {
     text-indent: 30px;
