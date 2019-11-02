@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block base_navbar %}
+{{super()}}
+{% endblock %}
+
+{% block body %}
+    <h1>{{ item }}</h1>
+    <p class="fig"><img width="40%" src="{{url_for('static', filename=item +'.jpg')}}" ></p>
+    <p class="text">{{ text }}</p>
+    <p>In the above text of words: {{ text|wordcount() }}</p>
+
+{% endblock %}
+
+{% block footer %}
+{{super()}}
+{% endblock %}

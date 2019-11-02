@@ -8,29 +8,12 @@ app = Flask(__name__)
 def get_home_page():
     return render_template("home.html", data=get_data())
 
-@app.route('/alarm_clock')
-def get_alarm_clock_page():
-    return render_template("alarm_clock.html", data=get_data())
-
-@app.route('/headphones')
-def get_headphones():
-    return render_template("headphones.html", data=get_data())
-
-@app.route('/iPod')
-def get_iPod():
-    return render_template("iPod.html", data=get_data())
-
-@app.route('/calculator')
-def get_calculator():
-    return render_template("calculator.html", data=get_data())
-
-@app.route('/coffeemaker')
-def get_coffeemaker():
-    return render_template("coffeemaker.html", data=get_data())
-
-@app.route('/battery_charger')
-def get_battery_charger():
-    return render_template("battery_charger.html", data=get_data())
+@app.route('/<item>')
+def get_items(item):
+    for dct in get_data():
+        if dct["title"] == item:
+            text = dct["text"]
+            return render_template('item.html', item=item, text=text)
 
 @app.route('/author')
 def get_author_page():
