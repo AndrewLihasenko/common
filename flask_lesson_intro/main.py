@@ -9,16 +9,16 @@ app = Flask(__name__)
 def get_home_page():
     return render_template("home.html", data=get_data())
 
+
 @app.route('/<item>')
 def get_items(item):
     data = get_data()
-    if item in [dct['title'] for dct in data]:
-        for dct in data:
-            if item == dct['title']:
-                text = dct["text"]
-                return render_template('item.html', item=item, text=text)
-    else:
-        return errors.page_not_found(404)
+    for dct in data:
+        if item == dct['title']:
+            text = dct["text"]
+            return render_template('item.html', item=item, text=text)
+    return errors.page_not_found(404)
+
 
 @app.route('/author')
 def get_author_page():
