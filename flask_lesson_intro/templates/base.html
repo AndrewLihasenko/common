@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% if True %}
+    <title>{{ item }} - Homework Flask Intro (II)</title>
+    {% else %}
+    <title>Homework Flask Intro (II)</title>
+    {% endif %}
+  <style>
+   h1 {
+    text-indent: 30px;
+   }
+   p {
+    text-indent: 30px;
+   }
+   .fig {
+    text-align: center;
+   }
+   .text {
+    text-align: left;
+   }
+   .error {
+    text-align:  center;
+    padding: 50px;
+   }
+
+  </style>
+</head>
+<body>
+
+{% block base_navbar %}
+
+<!--Navbar-->
+<nav class="bg navbar navbar-expand-lg navbar-dark primary-color">
+
+  <!-- Navbar brand -->
+  <a class="navbar-brand">Homework Flask Intro (II)</a>
+
+  <!-- Collapsible content -->
+  <div class="collapse navbar-collapse" id="basicExampleNav">
+
+    <!-- Links -->
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a href="{{url_for('get_home_page')}}">Home</a>
+          <span class="sr-only">(current)</span>
+      </li>
+    </ul>
+
+    <!-- Links -->
+    <form class="form-inline">
+      <div class="md-form my-0">
+        <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+      </div>
+    </form>
+  </div>
+  </nav>
+<!--/.Navbar-->
+
+{% endblock %}
+
+{% block body %}
+{% endblock %}
+
+{% block footer %}
+
+<!-- Footer -->
+<footer class="page-footer font-small teal pt-4">
+
+  <!-- Copyright -->
+  <div class="footer-copyright text-center py-3">© 2019 Copyright:
+    <a href="{{url_for('get_author_page')}}">Author</a>
+  </div>
+  <!-- Copyright -->
+
+</footer>
+<!-- Footer -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+<link rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous">
+
+{% endblock %}
+
+</body>
+</html>
