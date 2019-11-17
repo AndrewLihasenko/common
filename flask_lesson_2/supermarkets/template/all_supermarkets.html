@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block links_navbar %}
+<a href="{{ url_for('get_home_page') }}">Home</a>
+{% endblock %}
+
+{% block body %}
+    <h1 align="center">Supermarkets</h1><br>
+
+    <div class="fig">
+    <form action="{{ url_for('supermarkets.get_supermarkets_by_filter') }}">
+        <p>Sort by location</p>
+        <input type="text" name="location"/>
+        <p><input type="submit" value="search"/> <input type="submit" value="refresh"/> </p><br>
+    </form>
+    </div>
+
+    <div class="list-prod">
+        {% for item in data %}
+            {% if item["location"] == request.args.get('location') %}
+                <ul><li><a href="{{ url_for('supermarkets.get_supermarket_id', supermkt_id=item['id']) }}">{{ item['name'] }}</a></li></ul>
+            {% elif not request.args.get('location') %}
+                {% if not session.get(item['id']) %}
+                    <ul><li><a href="{{ url_for('supermarkets.get_supermarket_id', supermkt_id=item['id']) }}">{{ item['name'] }}</a></li></ul>
+                {% else %}
+                    <ul><li><span class="isDisabled"><a href="{{ url_for('supermarkets.get_supermarket_id', supermkt_id=item['id']) }}">{{ item['name'] }}</a></span></li></ul>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    </div>
+    <br><p align="center"><a href="{{ url_for('supermarkets.add_supermarket') }}">Add supermarket</a></p><br>
+
+{% endblock %}

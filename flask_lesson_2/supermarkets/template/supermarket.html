@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block links_navbar %}
+<a href="{{ url_for('get_home_page') }}">Home</a>&nbsp;
+<a href="{{ url_for('supermarkets.get_supermarkets') }}">All supermarkets</a>
+{% endblock %}
+
+{% block body %}
+    <div class="fig">
+        <h1>{{ name }}</h1><br>
+        <h4>Location: {{ location }}</h4>
+            <img width="50%" src="{{ url_for('supermarkets.static', filename=img_name) }}" >
+    </div>
+{% endblock %}
