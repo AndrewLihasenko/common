@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block links_navbar %}
+<a href="{{ url_for('get_home_page') }}">Home</a>
+{% endblock %}
+
+{% block body %}
+    <h1 align="center">Products</h1><br>
+
+    <div class="fig">
+    <form action="{{ url_for('products.get_products_by_filter') }}">
+        <p>Sort by price</p>
+        <input type="text" name="price"/>
+        <p><input type="submit" value="search"/> <input type="submit" value="refresh"/> </p><br>
+    </form>
+    </div>
+
+    <div class="list-prod">
+        {% for item in data %}
+            {% if item["price"] == request.args.get('price') %}
+                <ul><li><a href="{{ url_for('products.get_product_id', prod_id=item['id']) }}">{{ item['name'] }}</a></li></ul>
+            {% elif not request.args.get('price') %}
+                {% if not session.get(item['id']) %}
+                    <ul><li><a href="{{ url_for('products.get_product_id', prod_id=item['id']) }}">{{ item['name'] }}</a></li></ul>
+                {% else %}
+                    <ul><li><span class="isDisabled"><a href="{{ url_for('products.get_product_id', prod_id=item['id']) }}">{{ item['name'] }}</a></span></li></ul>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    </div>
+    <br><p align="center"><a href="{{ url_for('products.add_product') }}">Add product</a></p><br>
+
+{% endblock %}

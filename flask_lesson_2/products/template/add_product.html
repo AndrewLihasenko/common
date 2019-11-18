@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block body %}
+    <h1 align="center">Add Product</h1><br>
+
+    <div class="fig">
+    <form enctype="multipart/form-data" action="{{ url_for('products.save_product') }}" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.name.label }}<br>
+            {{ form.name(size=25) }}
+        </p>
+        <p>
+            {{ form.description.label }}<br>
+            {{ form.description(cols="40", rows="3") }}
+        </p>
+        <p>
+            {{ form.price.label }}<br>
+            {{ form.price(size=25) }}
+        </p>
+        <p>
+            {{ form.image.label }}<br>
+            {{ form.image }}<br>
+        </p>
+        <p>{{ form.submit() }}</p>
+     </form>
+     </div>
+
+{% endblock %}

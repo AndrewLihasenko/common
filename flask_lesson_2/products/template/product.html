@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block links_navbar %}
+<a href="{{ url_for('get_home_page') }}">Home</a>&nbsp;
+<a href="{{ url_for('products.get_products') }}">All products</a>
+{% endblock %}
+
+
+
+{% block body %}
+    <div class="fig">
+        <h1>{{ name }}</h1><br>
+            <img width="20%" src="{{ url_for('products.static', filename=img_name) }}" >
+        <div class="description"> {{ description }}</div><br>
+        <p> Starting at $ {{ price }}</p><br>
+    </div>
+{% endblock %}
