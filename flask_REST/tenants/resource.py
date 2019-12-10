@@ -50,6 +50,8 @@ class GetTenants(Resource):
         for tenant in tenants:
             if tenant.passport_id == data.get('passport_id'):
                 tenant.room_number = data.get('room_number')
+                return tenant, 'Room number updated'
+        return 'Room number not updated'
 
     @marshal_with(tenants_structure)
     def delete(self):
@@ -57,4 +59,5 @@ class GetTenants(Resource):
         for tenant in tenants:
             if args.get('delete') == tenant.passport_id:
                 tenants.remove(tenant)
-                return tenants
+                return tenants, 'Tenant deleted'
+        return 'Tenant not deleted'

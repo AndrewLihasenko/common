@@ -43,6 +43,8 @@ class GetStaff(Resource):
         for employee in staff:
             if employee.passport_id == data.get('passport_id'):
                 employee.salary = data.get('salary')
+                return employee, 'Salary updated'
+        return 'Salary not updated'
 
     @marshal_with(staff_structure)
     def delete(self):
@@ -50,4 +52,5 @@ class GetStaff(Resource):
         for employee in staff:
             if args.get('delete') == employee.passport_id:
                 staff.remove(employee)
-                return staff
+                return staff, 'Info about employee deleted'
+        return 'Info about employee not deleted'

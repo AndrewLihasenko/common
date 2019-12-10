@@ -30,11 +30,11 @@ class GetRooms(Resource):
         for room in rooms:
             if args.get('room') == room.number:
                 return room
-        if args.get('filter') == 'available':
-            return [room for room in rooms if room.status == 'available']
-        elif args.get('filter') == 'closed':
-            return [room for room in rooms if room.status == 'closed']
-        return rooms
+            if args.get('filter') == 'available':
+                return [room for room in rooms if room.status == 'available']
+            elif args.get('filter') == 'closed':
+                return [room for room in rooms if room.status == 'closed']
+            return rooms
 
     @marshal_with(rooms_structure)
     def patch(self):
@@ -42,6 +42,8 @@ class GetRooms(Resource):
         for room in rooms:
             if room.number == data.get('number'):
                 room.status = data.get('status')
+                return room, 'Room status updated'
+        return 'Room status not updated'
 
     @marshal_with(rooms_structure)
     def post(self):
@@ -56,4 +58,5 @@ class GetRooms(Resource):
         for room in rooms:
             if args.get('delete') == room.number:
                 rooms.remove(room)
-                return rooms
+                return rooms, 'Rooms deleted'
+        return 'Rooms not deleted'
