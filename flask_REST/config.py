@@ -18,9 +18,5 @@ class ProdConfig(Config):
 
 def run_config():
     env = os.environ.get("ENV")
-    if env == "TEST":
-        return TestConfig
-    elif env == "PROD":
-        return ProdConfig
-    else:
-        return Config
+    config = {"TEST": TestConfig, "PROD": ProdConfig}
+    return config.get(env, Config)

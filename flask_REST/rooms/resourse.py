@@ -18,8 +18,8 @@ rooms_structure = {
 }
 
 parser = reqparse.RequestParser()
-parser.add_argument('filter')
-parser.add_argument('room', type=int)
+parser.add_argument('status')
+parser.add_argument('number', type=int)
 parser.add_argument('delete', type=int)
 
 
@@ -28,13 +28,11 @@ class GetRooms(Resource):
     def get(self):
         args = parser.parse_args()
         for room in rooms:
-            if args.get('room') == room.number:
-                return room
-            if args.get('filter') == 'available':
-                return [room for room in rooms if room.status == 'available']
-            elif args.get('filter') == 'closed':
-                return [room for room in rooms if room.status == 'closed']
-            return rooms
+            if args.get('number'):
+                return [room for room in rooms if args.get('number') == room.number]
+            elif args.get('status'):
+                return [room for room in rooms if args.get('status') == room.status]
+            return rooms, 200
 
     @marshal_with(rooms_structure)
     def patch(self):
@@ -43,14 +41,19 @@ class GetRooms(Resource):
             if room.number == data.get('number'):
                 room.status = data.get('status')
                 return room, 'Room status updated'
-        return 'Room status not updated'
+        return 'Room status not updated', 500
 
     @marshal_with(rooms_structure)
     def post(self):
         data = json.loads(request.data)
-        room = {**data}
-        rooms.append(room)
-        return rooms
+        numbers = [room.number for room in rooms]
+        if data.get('number') in numbers:
+            raise Exception('This room number exist', 500)
+        elif data.get('level') < 0 or data.get('price') < 0:
+            raise Exception('You entered negative number', 500)
+        new_room = {**data}
+        rooms.append(new_room)
+        return rooms, 200
 
     @marshal_with(rooms_structure)
     def delete(self):
@@ -59,4 +62,4 @@ class GetRooms(Resource):
             if args.get('delete') == room.number:
                 rooms.remove(room)
                 return rooms, 'Rooms deleted'
-        return 'Rooms not deleted'
+        return 'Rooms not deleted', 500

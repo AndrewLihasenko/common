@@ -18,6 +18,7 @@ staff_structure = {
 
 parser = reqparse.RequestParser()
 parser.add_argument('passport_id')
+parser.add_argument('position')
 parser.add_argument('delete')
 
 
@@ -26,16 +27,23 @@ class GetStaff(Resource):
     def get(self):
         args = parser.parse_args()
         for employee in staff:
-            if args.get('passport_id') == employee.passport_id:
-                return employee
-        return staff
+            if args.get('passport_id'):
+                return [employee for employee in staff if args.get('passport_id') == employee.passport_id]
+            if args.get('position'):
+                return [employee for employee in staff if args.get('position') == employee.position]
+            return staff, 200
 
     @marshal_with(staff_structure)
     def post(self):
         data = json.loads(request.data)
-        employee = {**data}
-        staff.append(employee)
-        return staff
+        oll_passport_id = [employee.passport_id for employee in staff]
+        if data.get('passport_id') in oll_passport_id:
+            raise Exception('This passport_id exist', 500)
+        elif data.get('salary') < 0:
+            raise Exception('You entered negative salary number', 500)
+        new_employee = {**data}
+        staff.append(new_employee)
+        return staff, 200
 
     @marshal_with(staff_structure)
     def patch(self):
@@ -44,7 +52,7 @@ class GetStaff(Resource):
             if employee.passport_id == data.get('passport_id'):
                 employee.salary = data.get('salary')
                 return employee, 'Salary updated'
-        return 'Salary not updated'
+        return 'Salary not updated', 500
 
     @marshal_with(staff_structure)
     def delete(self):
@@ -53,4 +61,4 @@ class GetStaff(Resource):
             if args.get('delete') == employee.passport_id:
                 staff.remove(employee)
                 return staff, 'Info about employee deleted'
-        return 'Info about employee not deleted'
+        return 'Info about employee not deleted', 500
