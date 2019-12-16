@@ -3,7 +3,7 @@ from flask_restful import Resource, marshal_with
 
 from db import db
 from model import RoomsModel, TenantsModel
-from marshal_structure import tenants_structure, rooms_structure, address_structure
+from marshal_structure import tenants_structure, rooms_structure
 from parcer import tenants_parser
 
 
