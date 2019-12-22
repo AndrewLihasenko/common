@@ -13,7 +13,7 @@ class GetStaff(Resource):
         name = staff_parser.parse_args().get("name")
         if name:
             employee = StaffModel.query.filter(StaffModel.name == name).all()
-            return employee, 200
+            return employee, 201
         return StaffModel.query.all(), 200
 
     @marshal_with(staff_structure)
@@ -21,13 +21,13 @@ class GetStaff(Resource):
         data = json.loads(request.data)
         if StaffModel.query.filter(
                 StaffModel.passport_id == data.get('passport_id')).first():
-            raise Exception('This passport id exist', 500)
+            return 'This passport id exist', 400
         elif data.get('salary') < 0:
-            raise Exception('You entered negative salary', 500)
+            return'You entered negative salary', 400
         employee = StaffModel(**data)
         db.session.add(employee)
         db.session.commit()
-        return StaffModel.query.all(), 200
+        return employee, 201
 
     @marshal_with(staff_structure)
     def patch(self, staff_id):
@@ -36,9 +36,12 @@ class GetStaff(Resource):
         if employee:
             employee.salary = data.get('salary')
             employee.position = data.get('position')
-            db.session.commit()
-            return employee, 200
-        raise ValueError("Sorry. Nothing change. Enter correct staff id", 500)
+            try:
+                db.session.commit()
+            except Exception as err:
+                return err, 400
+            return employee, 201
+        return "Sorry. Nothing change. Enter correct staff id", 400
 
     @marshal_with(staff_structure)
     def delete(self, staff_id):
@@ -47,7 +50,7 @@ class GetStaff(Resource):
             db.session.delete(employee)
             db.session.commit()
             return "Employee deleted", 200
-        raise ValueError("Sorry. Nothing change. Enter correct staff id", 500)
+        return "Sorry. Nothing change. Enter correct staff id", 400
 
 
 class StaffRoom(Resource):

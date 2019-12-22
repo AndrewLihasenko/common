@@ -14,7 +14,7 @@ class GetTenants(Resource):
         if passport_id:
             tenant = TenantsModel.query.filter(
                 TenantsModel.passport_id == passport_id).first()
-            return tenant, 200
+            return tenant, 201
         return TenantsModel.query.all(), 200
 
     @marshal_with(tenants_structure)
@@ -30,13 +30,13 @@ class GetTenants(Resource):
 
         if TenantsModel.query.filter(
                 TenantsModel.passport_id == data.get('passport_id')).first():
-            raise Exception('This passport_id exist', 500)
+            return 'This passport id exist', 400
         elif data.get('age') < 0:
-            raise Exception('You entered negative age number', 500)
+            return 'You entered negative age number', 400
         tenant = TenantsModel(**data)
         db.session.add(tenant)
         db.session.commit()
-        return TenantsModel.query.all(), 200
+        return tenant, 201
 
     @marshal_with(tenants_structure)
     def patch(self, tenant_id):
@@ -44,9 +44,12 @@ class GetTenants(Resource):
         tenant = TenantsModel.query.get(tenant_id)
         if tenant:
             tenant.name = data.get('name')
-            db.session.commit()
-            return tenant, 200
-        raise ValueError("Sorry. Nothing change. Enter correct tenant id", 500)
+            try:
+                db.session.commit()
+            except Exception as err:
+                return err, 400
+            return tenant, 201
+        return "Sorry. Nothing change. Enter correct tenant id", 400
 
     @marshal_with(tenants_structure)
     def delete(self, tenant_id):
@@ -55,7 +58,7 @@ class GetTenants(Resource):
             db.session.delete(tenant)
             db.session.commit()
             return "Employee deleted", 200
-        raise ValueError("Sorry. Nothing change. Enter correct tenant id", 500)
+        return "Sorry. Nothing change. Enter correct tenant id", 400
 
 
 class TenantRooms(Resource):
