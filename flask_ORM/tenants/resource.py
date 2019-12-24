@@ -14,7 +14,7 @@ class GetTenants(Resource):
         if passport_id:
             tenant = TenantsModel.query.filter(
                 TenantsModel.passport_id == passport_id).first()
-            return tenant, 201
+            return tenant, 200
         return TenantsModel.query.all(), 200
 
     @marshal_with(tenants_structure)
@@ -34,8 +34,11 @@ class GetTenants(Resource):
         elif data.get('age') < 0:
             return 'You entered negative age number', 400
         tenant = TenantsModel(**data)
-        db.session.add(tenant)
-        db.session.commit()
+        try:
+            db.session.add(tenant)
+            db.session.commit()
+        except (ConnectionError, PermissionError) as err:
+            return err, 400
         return tenant, 201
 
     @marshal_with(tenants_structure)
@@ -46,7 +49,7 @@ class GetTenants(Resource):
             tenant.name = data.get('name')
             try:
                 db.session.commit()
-            except Exception as err:
+            except (ConnectionError, PermissionError) as err:
                 return err, 400
             return tenant, 201
         return "Sorry. Nothing change. Enter correct tenant id", 400
@@ -55,8 +58,11 @@ class GetTenants(Resource):
     def delete(self, tenant_id):
         tenant = TenantsModel.query.get(tenant_id)
         if tenant:
-            db.session.delete(tenant)
-            db.session.commit()
+            try:
+                db.session.delete(tenant)
+                db.session.commit()
+            except (ConnectionError, PermissionError) as err:
+                return err, 400
             return "Employee deleted", 200
         return "Sorry. Nothing change. Enter correct tenant id", 400
 

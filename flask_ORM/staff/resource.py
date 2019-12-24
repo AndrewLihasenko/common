@@ -13,7 +13,7 @@ class GetStaff(Resource):
         name = staff_parser.parse_args().get("name")
         if name:
             employee = StaffModel.query.filter(StaffModel.name == name).all()
-            return employee, 201
+            return employee, 200
         return StaffModel.query.all(), 200
 
     @marshal_with(staff_structure)
@@ -23,10 +23,13 @@ class GetStaff(Resource):
                 StaffModel.passport_id == data.get('passport_id')).first():
             return 'This passport id exist', 400
         elif data.get('salary') < 0:
-            return'You entered negative salary', 400
+            return 'You entered negative salary', 400
         employee = StaffModel(**data)
-        db.session.add(employee)
-        db.session.commit()
+        try:
+            db.session.add(employee)
+            db.session.commit()
+        except (ConnectionError, PermissionError) as err:
+            return err, 400
         return employee, 201
 
     @marshal_with(staff_structure)
@@ -38,7 +41,7 @@ class GetStaff(Resource):
             employee.position = data.get('position')
             try:
                 db.session.commit()
-            except Exception as err:
+            except (ConnectionError, PermissionError) as err:
                 return err, 400
             return employee, 201
         return "Sorry. Nothing change. Enter correct staff id", 400
@@ -47,8 +50,11 @@ class GetStaff(Resource):
     def delete(self, staff_id):
         employee = StaffModel.query.get(staff_id)
         if employee:
-            db.session.delete(employee)
-            db.session.commit()
+            try:
+                db.session.delete(employee)
+                db.session.commit()
+            except (ConnectionError, PermissionError) as err:
+                return err, 400
             return "Employee deleted", 200
         return "Sorry. Nothing change. Enter correct staff id", 400
 
@@ -61,7 +67,10 @@ class StaffRoom(Resource):
         staff = StaffModel.query.filter_by(name=staff_name).first()
         room = RoomsModel.query.filter_by(number=room_number).first()
         staff.works.append(room)
-        db.session.commit()
+        try:
+            db.session.commit()
+        except (ConnectionError, PermissionError) as err:
+            return err, 400
         return f"Room {room.number} serve {staff.name}", 200
 
     @marshal_with(rooms_structure)

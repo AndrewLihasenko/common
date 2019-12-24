@@ -15,11 +15,11 @@ class GetRooms(Resource):
         if room_number:
             room = RoomsModel.query.filter(
                 RoomsModel.number == room_number).first()
-            return room, 201
+            return room, 200
         if room_status:
             room = RoomsModel.query.filter(
                 RoomsModel.status == room_status).all()
-            return room, 201
+            return room, 200
         return RoomsModel.query.all(), 200
 
     @marshal_with(rooms_structure)
@@ -30,7 +30,7 @@ class GetRooms(Resource):
             room.status = data.get('status')
             try:
                 db.session.commit()
-            except Exception as err:
+            except (ConnectionError, PermissionError) as err:
                 return err, 400
             return room, 201
         return "Sorry. Nothing change. Enter correct room id", 400
@@ -44,15 +44,21 @@ class GetRooms(Resource):
         elif data.get('level') < 0 or data.get('price') < 0:
             return 'You entered negative number', 400
         room = RoomsModel(**data)
-        db.session.add(room)
-        db.session.commit()
+        try:
+            db.session.add(room)
+            db.session.commit()
+        except (ConnectionError, PermissionError) as err:
+            return err, 400
         return room, 201
 
     @marshal_with(rooms_structure)
     def delete(self, room_id):
         room = RoomsModel.query.get(room_id)
         if room:
-            db.session.delete(room)
-            db.session.commit()
+            try:
+                db.session.delete(room)
+                db.session.commit()
+            except (ConnectionError, PermissionError) as err:
+                return err, 400
             return "Room deleted", 200
         return "Sorry. Nothing change. Enter correct room id", 400
