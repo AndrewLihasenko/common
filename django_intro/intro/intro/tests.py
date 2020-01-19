@@ -12,17 +12,12 @@ USER_URL = 'https://api.github.com/users/'
 class ViewTests(TestCase):
     client = Client()
 
-    def test_health_check_view(self):
-        response = self.client.get(reverse('health_check'))
-        assert response.status_code == HTTPStatus.OK
-
-    def test_index_view(self):
-        response = self.client.get(reverse('index'))
-        assert response.status_code == HTTPStatus.OK
-
-    def test_question_view(self):
-        response = self.client.get(reverse('github'))
-        assert response.status_code == HTTPStatus.OK
+    def test_views(self):
+        views = ['health_check', 'index', 'github']
+        for view in views:
+            with self.subTest(view=view):
+                response = self.client.get(reverse(view))
+                assert response.status_code == HTTPStatus.OK
 
 
 class ReturnDataTests(TestCase):
