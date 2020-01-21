@@ -1,0 +1,11 @@
+version: "3.7"
+services:
+  intro:
+    build: .
+    ports:
+      - 8000:8000
+    healthcheck:
+      test: ["CMD-SHELL", "curl localhost:8000/healthcheck/ | grep OK"]
+      interval: 10s
+      timeout: 1s
+      retries: 2
